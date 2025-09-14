@@ -1,0 +1,368 @@
+```{r}
+#| label: setup
+#| include: false
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.height = 5,
+  fig.align = "center",
+  out.width = "100%"
+)
+
+library(countdown)
+
+# Load required packages for QR code generation
+if (!require("qrcode")) install.packages("qrcode")
+library(qrcode)
+
+if (!require("magrittr")) install.packages("magrittr")
+library(magrittr)
+
+if (!require("here")) install.packages("here")
+library(here)
+here::i_am("Presentation/presentation.qmd")
+
+include_local_figure <- function(data_source) {
+  knitr::include_graphics(
+    path = here::here(
+      "Presentation/Materials",
+      data_source
+    ),
+    error = TRUE
+  )
+}
+
+source(
+  here::here("R/set_r_theme.R")
+)
+
+# Dynamic project name generation using {here}
+project_name <- 
+  basename(here::here())
+
+# Create a cleaner display name for the lecture
+display_name <- 
+  gsub("SSoQE-", "", project_name) %>%
+  gsub("_", " ", .) %>%
+  tools::toTitleCase()
+
+# Create dynamic URLs
+github_url <- 
+  paste0(
+    "https://github.com/SSoQE/",
+     project_name
+  )
+
+slides_url <- 
+  paste0(
+    "https://ssoqe.github.io/", 
+    project_name, "/"
+  )
+```
+
+#  {.title}
+
+<br>
+
+::::: columns
+::: {.column width="80%"}
+:::
+
+::: {.column width="20%"}
+```{r}
+#| label: ssoqe-logo-title
+include_local_figure("Logos/SSOQE_logo3.png")
+```
+:::
+:::::
+
+::::::: r-hstack
+::: {data-id="box1" style="background: `r ssoqe_cols['black']`; width: 135px; height: 15px; margin: 0px;"}
+:::
+
+::: {data-id="box2" style="background: `r ssoqe_cols['cambridge_blue']`; width: 405px; height: 15px; margin: 0px;"}
+:::
+
+::: {data-id="box3" style="background: `r ssoqe_cols['persian_green']`; width: 225px; height: 15px; margin: 0px;"}
+:::
+
+::: {data-id="box4" style="background: `r ssoqe_cols['satin_sheen_gold']`; width: 135px; height: 15px; margin: 0px;"}
+:::
+:::::::
+
+::: {.text-color-white .text-font-heading .text-size-heading2 .text-bold}
+`r display_name`
+:::
+
+::::: columns
+::: {.column width="20%"}
+:::
+
+::: {.column .text-right .text-size-body width="80%"}
+[👤]()Franka Gaiser
+
+[Science School of Quantitative Ecology 2025]{.text-color-black}
+
+[bit.ly/SSoQE](https://bit.ly/SSoQE){.text-color-black}
+:::
+:::::
+
+## [This presentation]{.text-bold .r-fit-text} {.title}
+
+:::::: columns
+:::: {.column width="70%"}
+::: r-fit-text
+
+[😸 Code on GitHub](%60r%20github_url%60)
+
+[🖥️ Slides](%60r%20slides_url%60)
+:::
+::::
+
+::: {.column width="30%"}
+```{r}
+#| label: qr_slides
+qr_slides <-
+  qrcode::qr_code(
+    slides_url,
+    ecl = "H"
+  )
+
+qrcode::generate_svg(
+  qrcode = qr_slides,
+  filename = here::here("Presentation/Materials/QR/qr_slides.svg"),
+  foreground = ssoqe_cols['white'],
+  background = ssoqe_cols['midnight_green']
+)
+
+include_local_figure("QR/qr_slides.svg")
+```
+:::
+::::::
+
+# [Learning Objectives]{.bold .r-fit-text} {.title}
+
+## What we'll cover today
+
+:::: {.columns}
+
+::: {.column width="45%" .incremental}
+
+### 🎯 **Main Topics**
+
+- Introducing DL
+- DL in Ecology
+- DL Hands-on
+- Reflecting on DL
+:::
+
+::: {.column width="55%" .incremental}
+
+### ✅ **By the end, you'll be able to:**
+
+- Explain the set up of DL models
+- Make decisions on DL model design
+- Reflect on the pros and cons of DL models
+:::
+
+::::
+
+# [Introduction to Deep Learning]{.bold .r-fit-text} {.title}
+
+## 🤔⁉️ What is Deep Learning ?
+```{r}
+#| label: Mentimeter one
+include_local_figure("QR/Qrcode_Mentimeter_SSoQE2025_DL.png")
+```
+Mentimeter code: **2460 2995**
+
+## The world of AI is manifold
+
+
+```{r}
+#| label: AI-world
+include_local_figure("Pictures/01_DL_world_PichlerHartig2022.png")
+```
+
+## Facets of Machine Learning
+<br>
+🧠 **Main idea:** Computer learns from data  
+🎯 **Main goal:** Making good predictions for new data  
+<br>
+  
+:::: {.columns}
+
+::: {.column width="50%" .incremental .fragment}
+
+#### **supervised vs unsupervised learning**
+<br>
+    
+::: 
+
+::: {.column width="50%" .incremental .fragment}
+
+#### **classification vs regression**
+<br>  
+
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column width="25%" .incremental .fragment}
+```{r}
+#| label: segmentation
+include_local_figure("Pictures/02_Segmentation.png")
+```
+:::
+
+::: {.column width="25%" .incremental .fragment}
+```{r}
+#| label: clustering
+include_local_figure("Pictures/03_Clustering.png")
+```
+:::
+
+::: {.column width="25%" .incremental .fragment}
+```{r}
+#| label: classification
+include_local_figure("Pictures/04_Classification.png")
+```
+:::
+
+::: {.column width="25%" .incremental .fragment}
+```{r}
+#| label: regression
+include_local_figure("Pictures/05_Regression.png")
+```
+:::
+
+::::
+
+## The unique feature of Deep Learning
+
+```{r}
+#| label: DL network architecture
+include_local_figure("Pictures/06_DLArchitecture.png")
+```
+
+## Deep Learning vs Machine Learning
+
+❗Different strengths and use cases 
+
+:::: {.columns}
+
+::: {.column width="50%" .incremental}
+
+**Deep Learning**  
+[unstructured]{.text-highlight-midnightGreen} data such as images, text, or audio
+
+```{r}
+#| label: sattelite landuse
+include_local_figure("Pictures/08_sattelitelanduse.png")
+```
+
+:::
+
+::: {.column width="50%" .incremental .fragment}
+
+**Machine Learning**  
+less data in [structured]{.text-highlight-persianGreen}, tabular manner
+
+```{r}
+#| label: table
+include_local_figure("Pictures/10_table.png")
+```
+
+:::
+::::
+
+## 🤔⁉️ Have you built a Deep Learning model before ?
+```{r}
+#| label: Mentimeter two
+include_local_figure("QR/Qrcode_Mentimeter_SSoQE2025_DL.png")
+```
+Mentimeter code: **2460 2995**
+
+# [Examples of Deep Learning in Ecology]{.bold .r-fit-text} {.title}
+
+## 🤔⁉️ Which use cases of deep learning in ecology do you know ?
+```{r}
+#| label: Mentimeter three
+include_local_figure("QR/Qrcode_Mentimeter_SSoQE2025_DL.png")
+```
+Mentimeter code: **2460 2995**
+
+## 📸 Object detection and image classification for biodiversity monitoring or habitat mapping
+<br>
+
+:::: {.columns}
+::: {.column width="50%" .incremental }
+
+```{r}
+#| label: camera traps
+include_local_figure("Pictures/11_wildlifeAI.png")
+```
+
+:::
+::: {.column width="50%" .incremental }
+```{r}
+#| label: habitat mapping
+include_local_figure("Pictures/12_habitatmapping.png")
+```
+:::
+::::
+
+## Multispecies distribution modelling
+```{r}
+#| label: multispecies
+include_local_figure("Pictures/14_Multispecies.png")
+```
+
+## DeepDive: Estimating global biodiversity patterns through time
+```{r}
+#| label: deepdive
+include_local_figure("Pictures/16_DeepDive.png")
+```
+
+# [Deep Learning Basics Hands-on]{.bold .r-fit-text} {.title}
+
+# [Deep Learning a Research Frontier]{.bold .r-fit-text} {.title}
+
+## Explainable AI
+```{r}
+#| label: explainableAI
+include_local_figure("Pictures/17_ExplainableAI.png")
+```
+
+## Using existing DL models
+```{r}
+#| label: existingAI
+include_local_figure("Pictures/18_ExistingAI.png")
+```
+
+## When is it worth it?
+- Know-how 🤓
+- How much more do we learn?
+- Ethics 🤝
+- Sustainability 🌱
+
+## 🤔⁉️ How would you rank the mentioned concerns when buidling DL models?
+```{r}
+#| label: Mentimeter four
+include_local_figure("QR/Qrcode_Mentimeter_SSoQE2025_DL.png")
+```
+Mentimeter code: **2460 2995**
+
+## About me
+
+[Franka Gaiser]{.bold .r-fit-text .text-color-black} 
+Doctoral Candidate and Research Assistant at [University of Bayreuth](https://www.spowi5.uni-bayreuth.de/en/team/Gaiser/index.php)
+
+-   📧 Franka.Gaiser(at)uni-bayreuth.de
+-   🌐 [Franka Gaiser LinkedIn](www.linkedin.com/in/franka-gaiser-a1534a202)
+-   🐱 [Github](https://github.com/FGaiser)
+-   🆔 [ORCID](https://orcid.org/0009-0003-2600-6603)
+
+
